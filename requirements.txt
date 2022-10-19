@@ -1,0 +1,5 @@
+ae-ffmpeg==1.1.1
+auto-editor==22.39.1
+av==9.2.0
+numpy==1.23.4
+Pillow==9.2.0
