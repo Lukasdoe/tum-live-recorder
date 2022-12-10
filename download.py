@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess
 import time
-
+import os
 
 def download(filename: str, playlist_url: str, tmp_directory: Path):
 
@@ -10,6 +10,10 @@ def download(filename: str, playlist_url: str, tmp_directory: Path):
 
     temporary_path = Path(tmp_directory, filename +
                           ".mp4")  # Download location
+
+    if(os.path.exists(temporary_path)):
+       print(str(temporary_path)+" already exists")
+       return
 
     download_start_time = time.time()  # Track download time
 

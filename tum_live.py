@@ -16,8 +16,9 @@ def enumerate_list(list_of_tuples):
 
 
 def login(tum_username: str, tum_password: str) -> webdriver:
-
-    driver = webdriver.Chrome("/usr/bin/chromedriver")
+    driver_options = webdriver.ChromeOptions()
+    driver_options.add_argument("--headless")
+    driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver",options=driver_options)
 
     print("Logging in..")
     driver.get("https://live.rbg.tum.de/login")
@@ -37,7 +38,7 @@ def get_video_links_of_subject(driver: webdriver, subjects_identifier, camera_ty
     subject_url = "https://live.rbg.tum.de/course/" + subjects_identifier
     driver.get(subject_url)
 
-    links_on_page = driver.find_elements(By.XPATH, ".//a")
+    links_on_page = driver.find_elements(By.XPATH, "//a[@href]")
     video_urls = []
     for link in links_on_page:
         link_url = link.get_attribute("href")
@@ -53,8 +54,7 @@ def get_video_links_of_subject(driver: webdriver, subjects_identifier, camera_ty
         driver.get(video_url + "/" + camera_type)
         sleep(2)
         filename = driver.find_element(
-            By.XPATH, "/html/body/div[3]/div/div[2]/div[1]/div[2]/div/div/i").text.strip()
-
+            By.XPATH, '//*[@id="watchPageMainWrapper"]/div/div[2]/div[1]/div[2]/div/div/i').text.strip()
         playlist_url = get_playlist_url(driver.page_source)
         video_playlists.append((filename, playlist_url))
 

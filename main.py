@@ -5,16 +5,15 @@ import json
 
 
 subjects = {
-    "GDB": ("2022/W/GDB", "COMB")
+    "GDB": ("2022/W/GDB", "COMB"),
 }
 
-credentials = json.load(open("credentials.json", "r"))
+credentials = json.load(open("/home/pi/live-rbg-recorder/credentials.json", "r"))
 
 queue = tum_live.get_subjects(
     subjects, credentials["username"], credentials["password"])
 
 for filename, p in queue:
-    if (len(p) > 0):
-        videoname, playlist_url = p[0]
+    for videoname,playlist_url in p:
         download(filename +
-                 "_"+videoname+"mp4", playlist_url, Path("downloads"))
+                 "_"+videoname+"mp4", playlist_url, Path("rbg-downloads"))
