@@ -1,24 +1,23 @@
 import argparse
-import os
 import re
 from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 
 # From
 # https://github.com/Valentin-Metz/tum_video_scraper
 
 
 def enumerate_list(list_of_tuples):
-    return [(f'{index:03d}_{name}', url) for index, (name, url) in enumerate(list_of_tuples)]
+    return [(f'{index:03d}', url) for index, url in enumerate(list_of_tuples)]
 
 
-def login(tum_username: str, tum_password: str) -> webdriver:
+def login(tum_username: str, tum_password: str) -> webdriver.Chrome:
     driver_options = webdriver.ChromeOptions()
     driver_options.add_argument("--headless")
-    driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver",options=driver_options)
+    driver = webdriver.Chrome(
+        "/usr/lib/chromium-browser/chromedriver", options=driver_options)
 
     print("Logging in..")
     driver.get("https://live.rbg.tum.de/login")
@@ -34,7 +33,7 @@ def login(tum_username: str, tum_password: str) -> webdriver:
     return driver
 
 
-def get_video_links_of_subject(driver: webdriver, subjects_identifier, camera_type):
+def get_video_links_of_subject(driver: webdriver.Chrome, subjects_identifier, camera_type):
     subject_url = "https://live.rbg.tum.de/course/" + subjects_identifier
     driver.get(subject_url)
 
@@ -53,10 +52,10 @@ def get_video_links_of_subject(driver: webdriver, subjects_identifier, camera_ty
     for video_url in video_urls:
         driver.get(video_url + "/" + camera_type)
         sleep(2)
-        filename = driver.find_element(
+        driver.find_element(
             By.XPATH, '//*[@id="watchPageMainWrapper"]/div/div[2]/div[1]/div[2]/div/div/i').text.strip()
         playlist_url = get_playlist_url(driver.page_source)
-        video_playlists.append((filename, playlist_url))
+        video_playlists.append(playlist_url)
 
     video_playlists.reverse()
     return video_playlists
@@ -79,7 +78,7 @@ def get_playlist_url(source: str) -> str:
 
 def get_subjects(subjects, tum_username: str, tum_password: str):
     driver = login(tum_username, tum_password)
-    queue=[]
+    queue = []
     for subject_name, (subjects_identifier, camera_type) in subjects.items():
         print(
             f"Scanning video links for: {subject_name} ({subjects_identifier}) of the {camera_type}..")

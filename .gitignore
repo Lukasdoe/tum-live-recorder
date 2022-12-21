@@ -1,4 +1,5 @@
-venv/
 downloads/*
 credentials.json
 __pycache__/*
+rbg-downloads/
+logs/
