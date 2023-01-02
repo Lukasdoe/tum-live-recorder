@@ -5,8 +5,7 @@ import json
 from status_update import notification_helper
 
 subjects = {
-    "GDB": ("2022/W/GDB", "COMB"),
-    "ITSEC": ("2022/W/ItSec", "COMB"),
+    "GDB": ("2022/W/GDB", "COMB")
 }
 
 credentials = json.load(open("credentials.json", "r"))
