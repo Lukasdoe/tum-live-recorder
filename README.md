@@ -18,7 +18,7 @@ In order for the script to work, you need to create a **credentials.json** file 
 
 This allows the script to log in to tum-live and extract the currently playing streams.
 
-You can select the lectures you want to download by adjusting the desired subjects in [main.py](live-rbg-recorder/tree/master/main.py).
+You can select the lectures you want to download by adjusting the desired subjects in [main.py](main.py).
 
 The format is:
 
