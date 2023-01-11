@@ -53,7 +53,7 @@ def get_video_links_of_subject(driver: webdriver.Chrome, subjects_identifier, ca
         driver.get(video_url + "/" + camera_type)
         sleep(2)
         driver.find_element(
-            By.XPATH, '//*[@id="watchPageMainWrapper"]/div/div[2]/div[1]/div[2]/div/div/i').text.strip()
+            By.XPATH, '/html/body/div[5]/div/div[3]/div[1]/div[2]/div/div/i').text.strip()
         playlist_url = get_playlist_url(driver.page_source)
         video_playlists.append(playlist_url)
 
