@@ -52,28 +52,25 @@ def get_video_links_of_subject(driver: webdriver.Chrome, subjects_identifier, ca
     for video_url in video_urls:
         driver.get(video_url + "/" + camera_type)
         sleep(2)
-        driver.find_element(
-            By.XPATH, '/html/body/div[5]/div/div[3]/div[1]/div[2]/div/div/i').text.strip()
-        playlist_url = get_playlist_url(driver.page_source)
+        # find <i tag> with title "Copy HLS URL"
+        copy_hls_url_button = driver.find_element(
+            By.XPATH, "//i[@title='Copy HLS URL']")
+
+        # extract html content of <i> tag
+        copy_hls_url_button_html = copy_hls_url_button.get_attribute(
+            'outerHTML')
+
+        # extract url from html content
+        playlist_url = re.search(
+            r"('https://.+').replaceAll", copy_hls_url_button_html).group(1)  # type: ignore
+
+        # remove single quotes
+        playlist_url = playlist_url[1:-1]
+
         video_playlists.append(playlist_url)
 
     video_playlists.reverse()
     return video_playlists
-
-
-def get_playlist_url(source: str) -> str:
-    prefix = 'https://stream.lrz.de/vod/_definst_/mp4:tum/RBG/'
-    postfix = '/playlist.m3u8'
-    playlist_extracted_url = re.search(prefix + '(.+?)' + postfix, source)
-    if not playlist_extracted_url:
-        prefix = "https://live.stream.lrz.de/livetum/"
-        playlist_extracted_url = re.search(prefix + '(.+?)' + postfix, source)
-    if not playlist_extracted_url:
-        raise Exception(
-            "Could not extract playlist URL from TUM-live! Page source:\n" + source)
-    playlist_extracted_url = playlist_extracted_url.group(1)
-    playlist_url = prefix + playlist_extracted_url + postfix
-    return playlist_url
 
 
 def get_subjects(subjects, tum_username: str, tum_password: str):
