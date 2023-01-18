@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 # From
-# https://github.com/Valentin-Metz/tum_video_scraper
+# https://github.pcom/Valentin-Metz/tum_video_scraper
 
 
 def enumerate_list(list_of_tuples):
@@ -62,10 +62,7 @@ def get_video_links_of_subject(driver: webdriver.Chrome, subjects_identifier, ca
 
         # extract url from html content
         playlist_url = re.search(
-            r"('https://.+').replaceAll", copy_hls_url_button_html).group(1)  # type: ignore
-
-        # remove single quotes
-        playlist_url = playlist_url[1:-1]
+            r'copyToClipboard\(\'(.*?)\'.replaceAll', copy_hls_url_button_html).group(1)
 
         video_playlists.append(playlist_url)
 
