@@ -1,6 +1,5 @@
 from pathlib import Path
 from download import download
-from status_update import notification_helper
 from datetime import datetime
 import tum_live
 import json
